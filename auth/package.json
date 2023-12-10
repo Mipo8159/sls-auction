@@ -1,0 +1,17 @@
+{
+  "name": "auth",
+  "version": "1.0.0",
+  "description": "Auth part of sls project",
+  "author": "Mipo",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write \"**/*.js\""
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "serverless-bundle": "^6.0.0"
+  }
+}

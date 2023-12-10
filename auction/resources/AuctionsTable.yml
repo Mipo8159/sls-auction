@@ -1,0 +1,24 @@
+AuctionsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: AuctionsTable-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: id # field name
+        AttributeType: S # field type
+      - AttributeName: status
+        AttributeType: S
+      - AttributeName: endingAt
+        AttributeType: S
+    KeySchema:
+      - AttributeName: id # assigns key type
+        KeyType: HASH
+    GlobalSecondaryIndexes: # allow query with different keys
+      - IndexName: statusAndEndDate
+        KeySchema:
+          - AttributeName: status
+            KeyType: HASH # search
+          - AttributeName: endingAt
+            KeyType: RANGE # sort/filter
+        Projection:
+          ProjectionType: ALL # keep all original fields in virtual table

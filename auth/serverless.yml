@@ -1,0 +1,60 @@
+service: auth
+frameworkVersion: '3'
+
+plugins:
+  - serverless-bundle
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 128
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    AUTH0_PUBLIC_KEY: ${file(secret.pem)}
+
+functions:
+  auth:
+    handler: src/handlers/auth.handler
+    cors: true
+
+  publicEndpoint:
+    handler: src/handlers/publicEndpoint.handler
+    events:
+      - http:
+          path: /public
+          method: POST
+          cors: true
+
+  privateEndpoint:
+    handler: src/handlers/privateEndpoint.handler
+    events:
+      - http:
+          path: /private
+          method: POST
+          authorizer: auth # uses auth lambda
+          cors: true
+
+resources:
+  Resources:
+    # This response is needed for custom authorizer failures cors support
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+    AuthFailureGatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'

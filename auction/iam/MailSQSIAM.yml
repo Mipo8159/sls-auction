@@ -1,0 +1,5 @@
+MailSQSIAM: # lambda sending messages to SQS
+  Effect: Allow
+  Action:
+    - sqs:SendMessage
+  Resource: ${self:custom.MailSQS.arn}

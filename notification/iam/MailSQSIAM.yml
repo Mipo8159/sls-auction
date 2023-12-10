@@ -1,0 +1,5 @@
+MailSQSIAM: # lambda receiving messages to SQS
+  Effect: Allow
+  Action:
+    - sqs:ReceiveMessage
+  Resource: ${self:custom.MailSQS.arn}

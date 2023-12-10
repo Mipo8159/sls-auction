@@ -1,0 +1,19 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "Notification part of sls project",
+  "author": "Mipo",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write \"**/*.js\""
+  },
+  "dependencies": {
+    "@middy/core": "^4.6.5",
+    "@middy/http-json-body-parser": "^4.6.5",
+    "aws-sdk": "^2.1483.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "serverless-bundle": "^6.0.0"
+  }
+}

@@ -1,0 +1,38 @@
+service: notification
+frameworkVersion: '3'
+
+plugins:
+  - serverless-bundle
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    SES_REGION: us-east-1
+    SES_SOURCE: stalkerglac@gmail.com
+  iamRoleStatements:
+    - ${file(iam/SendMailIAM.yml):SendMailIAM}
+
+resources:
+  Resources:
+    MailSQS: ${file(resources/MailSQS.yml):MailSQS}
+  Outputs:
+    MailSQSArn: ${file(resources/MailSQS.yml):Outputs.MailSQSArn}
+    MailSQSUrl: ${file(resources/MailSQS.yml):Outputs.MailSQSUrl}
+
+functions:
+  sendMail:
+    handler: src/handlers/sendMail.handler
+    events:
+      - sqs:
+          arn: ${self:custom.MailSQS.arn}
+          batchSize: 1 # default and maximum is 10
+
+custom:
+  MailSQS:
+    name: MailSQS-${self:provider.stage}
+    arn: !GetAtt MailSQS.Arn
+    url: !Ref MailSQS

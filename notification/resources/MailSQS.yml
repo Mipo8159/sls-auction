@@ -1,0 +1,14 @@
+MailSQS:
+  Type: AWS::SQS::Queue
+  Properties:
+    QueueName: ${self:custom.MailSQS.name}
+
+Outputs: # Value : Name (to be used in auction)
+  MailSQSArn:
+    Value: ${self:custom.MailSQS.arn}
+    Export:
+      Name: ${self:custom.MailSQS.name}-Arn
+  MailSQSUrl:
+    Value: ${self:custom.MailSQS.url}
+    Export:
+      Name: ${self:custom.MailSQS.name}-Url

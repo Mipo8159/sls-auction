@@ -1,0 +1,6 @@
+{
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/lalcebo/json-schema/master/serverless/reference.json": "file:///home/mip/Desktop/workdir/sweeft/career/sls-auction/auction/serverless.yml"
+  },
+  "yaml.validate": false
+}
